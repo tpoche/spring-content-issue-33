@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import child.File;
 import child.FileContentStore;
 import child.FileRepository;
+import child.FileService;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -24,13 +25,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.github.paulcwarren.ginkgo4j.Ginkgo4jSpringRunner;
 import com.jayway.restassured.RestAssured;
+import org.springframework.http.MediaType;
 
 @RunWith(Ginkgo4jSpringRunner.class)
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class GettingStartedTest {
-
-	@Autowired private FileRepository fileRepo;
-	@Autowired private FileContentStore fileContentStore;
+	@Autowired
+	private FileService fileService;
 	
     @Value("${local.server.port}") private int port;
 
@@ -48,7 +49,7 @@ public class GettingStartedTest {
             		f.setName("child-file");
             		f.setMimeType("text/plain");
             		f.setSummary("child file summary");
-            		file = fileRepo.save(f);
+            		file = fileService.create(f);
         		});
         		
         		It("should be able to associate content with the Entity", () -> {
@@ -59,14 +60,16 @@ public class GettingStartedTest {
         		    .then()
         		    	.statusCode(HttpStatus.SC_OK);
                 	    	
-        	    	file = fileRepo.findOne(file.getId());
-        	    	assertThat(IOUtils.toString(fileContentStore.getContent(file)), is("This is plain text content!"));
+//        	    	file = fileRepo.getOne(file.getId());
+        	    	assertThat(IOUtils.toString(fileService.getContent(file.getId()).getInputStreamResource().getInputStream()), is("This is plain text content!"));
         		});
         		
         		Context("with existing content", () -> {
         			BeforeEach(() -> {
-        				fileContentStore.setContent(file, new ByteArrayInputStream("Existing content".getBytes()));
-        				fileRepo.save(file);
+        				fileService.create(file);
+        				fileService.saveContent(file.getId(), MediaType.TEXT_PLAIN_VALUE, new ByteArrayInputStream("Existing content".getBytes()));
+//        				fileContentStore.setContent(file, new ByteArrayInputStream("Existing content".getBytes()));
+//        				fileRepo.save(file);
         			});
         			
         			It("should return the content", () -> {
