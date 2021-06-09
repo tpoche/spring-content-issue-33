@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = {"com.example.*"})
 @EnableScheduling
-@EnableFilesystemStores(basePackageClasses = FileContentStore.class)
+//@EnableFilesystemStores(basePackageClasses = FileContentStore.class)
 @EnableJpaRepositories(basePackageClasses = FileRepository.class)
 @EntityScan(basePackageClasses = File.class)
 @PropertySource("classpath:config/child.properties")
