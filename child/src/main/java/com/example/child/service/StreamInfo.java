@@ -1,4 +1,4 @@
-package child;
+package com.example.child.service;
 
 import org.springframework.core.io.InputStreamResource;
 

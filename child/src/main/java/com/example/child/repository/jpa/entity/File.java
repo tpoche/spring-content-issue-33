@@ -1,4 +1,4 @@
-package child;
+package com.example.child.repository.jpa.entity;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package gettingstarted;
+package com.example.parent;
 
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.BeforeEach;
 import static com.github.paulcwarren.ginkgo4j.Ginkgo4jDSL.Context;
@@ -10,10 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.ByteArrayInputStream;
 
-import child.File;
-import child.FileContentStore;
-import child.FileRepository;
-import child.FileService;
+import com.example.child.repository.jpa.entity.File;
+import com.example.child.service.FileServiceImpl;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
@@ -31,7 +29,7 @@ import org.springframework.http.MediaType;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class GettingStartedTest {
 	@Autowired
-	private FileService fileService;
+	private FileServiceImpl fileService;
 	
     @Value("${local.server.port}") private int port;
 
